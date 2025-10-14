@@ -12,7 +12,8 @@ export const styles = StyleSheet.create({
     },
 
     textStyle: {
-
+        color: '#FFFFFF',
+        fontSize: 16,
     },
 
     button: {
@@ -50,6 +51,22 @@ export const styles = StyleSheet.create({
 
     selectedButton: {
         color: '#FFC72C',
-    }
+    },
+
+    buttonGroup: {
+        flex: 1,
+        flexDirection: 'row',
+        padding: 15,
+    },
+
+    successText: {
+        color: "#00ff00ff",
+        textAlign: 'center'
+    },
+
+    errorText: {
+        color: "#ff0000ff",
+        textAlign: 'center',
+    },
 
 })
