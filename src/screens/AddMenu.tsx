@@ -13,14 +13,15 @@ import {
 } from "react-native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { RootStackParamList } from "../navigation/AppNavigator";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { menuData, menuType, MENU } from "../services/menuItems";
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { styles } from "../styles/styles";
 import { TextInput } from "react-native-gesture-handler";
+import { RootTabParamList } from "../navigation/AppNavigator";
 
 
-type Props = NativeStackScreenProps<RootStackParamList, "Add">;
+type Props = BottomTabScreenProps<RootTabParamList, "Add">;
 
 export default function AddMenu({ navigation }: Props) {
 
@@ -33,13 +34,13 @@ export default function AddMenu({ navigation }: Props) {
         return item.length <= 20
     }
 
-    function lengthHandleDes(item: string): Boolean {
+    function lengthHandleDescription(item: string): Boolean {
         return item.length <= 50
     }
 
     function isNotEmpty(name: string, desc: string, price: string): Boolean {
         const priceNum = (parseInt(price))
-        if ((name.length > 0 && desc.length > 0 && !isNaN(priceNum) && priceNum != 0) && (lengthHandleName(name) == true && lengthHandleDes(desc) == true)) {
+        if ((name.length > 0 && desc.length > 0 && !isNaN(priceNum) && priceNum != 0) && (lengthHandleName(name) == true && lengthHandleDescription(desc) == true)) {
             return true
         }
         return false
@@ -63,6 +64,9 @@ export default function AddMenu({ navigation }: Props) {
             resetInputs();
             Alert.alert("Success!", "Item has been added");
         }
+        else {
+            Alert.alert("Unsuccessful!", "Item has not been added")
+        }
     }
 
     return (
@@ -72,17 +76,16 @@ export default function AddMenu({ navigation }: Props) {
 
                     <View style={styles.switchContainer}>
                         <Pressable style={[styles.pressableButton, selectedItem === "Starter" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Starter")}>
-                            <Text style={[styles.buttonText, selectedItem === "Starter" && { color: "#F8BD06" }]}>Starter</Text>
+                            <Text style={[styles.switchButtonText, selectedItem === "Starter" && { color: "#F8BD06" }]}>Starter</Text>
                         </Pressable>
 
                         <Pressable style={[styles.pressableButton, selectedItem === "Main" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Main")}>
-                            <Text style={[styles.buttonText, selectedItem === "Main" && { color: "#F8BD06" }]}>Main</Text>
+                            <Text style={[styles.switchButtonText, selectedItem === "Main" && { color: "#F8BD06" }]}>Main</Text>
                         </Pressable>
 
                         <Pressable style={[styles.pressableButton, selectedItem === "Dessert" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Dessert")}>
-                            <Text style={[styles.buttonText, selectedItem === "Dessert" && { color: "#F8BD06" }]}>Dessert</Text>
+                            <Text style={[styles.switchButtonText, selectedItem === "Dessert" && { color: "#F8BD06" }]}>Dessert</Text>
                         </Pressable>
-
                     </View>
 
                     <TextInput style={menuStyle.inputStyle} placeholder="Name" placeholderTextColor={'#fff'} value={itemName} onChangeText={setItemName}></TextInput>
@@ -113,9 +116,6 @@ export default function AddMenu({ navigation }: Props) {
                     <View style={styles.container}>
                         <Pressable style={styles.pressableButton} onPress={addItem}>
                             <Text style={styles.textStyle}>Confirm</Text>
-                        </Pressable>
-                        <Pressable style={styles.pressableButton} onPress={() => navigation.goBack()}>
-                            <Text style={styles.textStyle}>Menu</Text>
                         </Pressable>
                     </View>
 

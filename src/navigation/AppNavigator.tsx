@@ -1,22 +1,71 @@
 import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { enableScreens } from 'react-native-screens'
+import HomeScreen from "../screens/HomeScreen";
+import SelectMenu from "../screens/MenuSelectScreen";
 import MenuScreen from '../screens/MenuScreen'
 import AddMenu from '../screens/AddMenu'
+import { Text, View } from "react-native";
+import MenuNavigator from "./MenuNavigator";
 
-export type RootStackParamList = {
-    Menu: undefined;
+export type RootTabParamList = {
+    Home: undefined;
+    SelectMenu: undefined;
     Add: undefined
 }
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export default function AppNavigator() {
     enableScreens(true)
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="Menu" component={MenuScreen} options={{ title: "Menu" }} />
-            <Stack.Screen name="Add" component={AddMenu} options={{ title: "Add items" }} />
-        </Stack.Navigator>
+        <Tab.Navigator screenOptions={{
+            headerShown: false,
+            tabBarStyle: {
+                backgroundColor: "#212121",
+                borderTopColor: "#2F2F2F",
+            },
+            tabBarActiveTintColor: "#F8BD06",
+            tabBarInactiveTintColor: "#FFFFFF",
+            sceneStyle: {
+                backgroundColor: "#212121"
+
+            }
+        }}>
+
+
+            <Tab.Screen
+                name="Home"
+                component={HomeScreen}
+                options={{
+                    title: "Home",
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Text style={{ color, fontSize: size }}>家</Text>
+                    )
+                }}
+            />
+
+            <Tab.Screen
+                name="Add"
+                component={AddMenu}
+                options={{
+                    title: "Add Items",
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Text style={{ color, fontSize: size }}>+</Text>
+                    )
+                }}
+            />
+
+            <Tab.Screen
+                name="SelectMenu"
+                component={MenuNavigator}
+                options={{
+                    title: "Menu",
+                    tabBarIcon: ({ focused, color, size }) => (
+                        <Text style={{ color, fontSize: size }}>☰</Text>
+                    )
+                }}
+            />
+        </Tab.Navigator>
     )
 }

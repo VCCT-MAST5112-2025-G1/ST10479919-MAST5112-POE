@@ -9,15 +9,24 @@ import {
     BackHandler,
     Button,
 } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { RootStackParamList } from "../navigation/AppNavigator";
+import { menuType, menuData, MENU } from "../services/menuItems";
 import { styles } from "../styles/styles";
+import { RootTabParamList } from "../navigation/AppNavigator";
 
 
-export default function HomeScreen() {
+type Props = BottomTabScreenProps<RootTabParamList, "Home">
+
+export default function HomeScreen({ navigation }: Props) {
+
+    const [selectedItem, setSelectedItem] = useState<menuType>("Starter");
+
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
+            <View style={styles.container}>
+
+            </View>
 
         </SafeAreaView >
     );

@@ -14,16 +14,7 @@ export const styles = StyleSheet.create({
     textStyle: {
         color: '#FFFFFF',
         fontSize: 16,
-    },
-
-    button: {
         textAlign: "center",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#282828",
-        padding: 10,
-        borderRadius: 5,
-        minWidth: 100,
     },
 
     switchContainer: {
@@ -47,10 +38,27 @@ export const styles = StyleSheet.create({
         color: '#FFFFFF',
         fontSize: 16,
         fontWeight: 500,
+        minWidth: 90,
+        textAlign: "center"
+    },
+
+    switchButtonText: {
+        color: '#FFFFFF',
+        fontSize: 16,
+        fontWeight: 500,
+        minWidth: 50,
+        textAlign: "center"
     },
 
     selectedButton: {
         color: '#FFC72C',
+    },
+
+    titleText: {
+        color: "#FFC72C",
+        fontSize: 24,
+        marginBottom: 30,
+        textAlign: "center"
     },
 
     buttonGroup: {

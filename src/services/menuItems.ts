@@ -7,6 +7,8 @@ export type MENU = {
 
 export type menuType = "Starter" | "Main" | "Dessert"
 
+export var menuList: MENU[] = [];
+
 export var menuData: Record<menuType, MENU[]> = {
 
     "Starter": [
