@@ -11,24 +11,33 @@ import {
     Button,
     StyleSheet,
 } from "react-native";
-import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MenuStackList } from "../navigation/MenuNavigator";
 import { menuType, menuData, MENU } from "../services/menuItems";
 import { styles } from "../styles/styles";
-import { RootTabParamList } from "../navigation/AppNavigator";
+import { useFocusEffect } from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<MenuStackList, "SelectMenu">;
 
 
 export default function SelectMenu({ navigation }: Props) {
+       const fadeAnimation = useRef(new Animated.Value(1)).current;
+     
+        useFocusEffect(
+            React.useCallback(() => {
+                Animated.timing(fadeAnimation, {toValue: 1, duration: 300, useNativeDriver: true}).start()
+                return () => {
+                    fadeAnimation.setValue(0);
+                }}, [])
+        )
 
     const handleCategorySelect = (category: menuType) => {
         navigation.navigate("Menu", { selectedType: category });
     }
 
     return (
+        <Animated.View style={{opacity: fadeAnimation, flex: 1}}>
         <SafeAreaView style={styles.container}>
             <Text style={styles.titleText}>
                 Select category
@@ -52,6 +61,7 @@ export default function SelectMenu({ navigation }: Props) {
 
             </View>
         </SafeAreaView>
+        </Animated.View>
     )
 }
 

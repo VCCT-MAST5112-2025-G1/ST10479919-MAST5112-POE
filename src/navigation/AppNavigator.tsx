@@ -1,9 +1,8 @@
-import React from "react";
+import React, {useRef} from "react";
+import { Animated } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { enableScreens } from 'react-native-screens'
 import HomeScreen from "../screens/HomeScreen";
-import SelectMenu from "../screens/MenuSelectScreen";
-import MenuScreen from '../screens/MenuScreen'
 import AddMenu from '../screens/AddMenu'
 import { Text, View } from "react-native";
 import MenuNavigator from "./MenuNavigator";
@@ -17,9 +16,21 @@ export type RootTabParamList = {
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
 export default function AppNavigator() {
+
+    const fadeAnimation = useRef(new Animated.Value(1)).current;
+
     enableScreens(true)
     return (
-        <Tab.Navigator screenOptions={{
+        <Tab.Navigator 
+        screenListeners={( { navigation }) => ({
+            tabPress: (e) => {
+                Animated.sequence([
+                    Animated.timing(fadeAnimation, { toValue: 0, duration: 150, useNativeDriver: true }),
+                    Animated.timing(fadeAnimation, { toValue: 1, duration: 150, useNativeDriver: true}),
+                ]).start()
+            }
+        })}
+        screenOptions={{
             headerShown: false,
             tabBarStyle: {
                 backgroundColor: "#212121",

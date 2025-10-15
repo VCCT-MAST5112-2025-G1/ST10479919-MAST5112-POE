@@ -20,14 +20,14 @@ type Props = BottomTabScreenProps<RootTabParamList, "Home">
 
 export default function HomeScreen({ navigation }: Props) {
 
-    const [selectedItem, setSelectedItem] = useState<menuType>("Starter");
-
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.container}>
-
+            <View>
+            <Text style={styles.textStyle}>Welcome to {<Text style={styles.titleText}>The cookbook</Text>}</Text>
             </View>
-
+            
+            {/* Change to add items added to list */}
+            <Text style={styles.textStyle}>Add some items from the menu to prepare a course!</Text>
         </SafeAreaView >
     );
 }

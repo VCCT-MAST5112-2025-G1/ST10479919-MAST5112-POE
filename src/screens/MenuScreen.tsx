@@ -1,14 +1,9 @@
 import React, { useState, useRef } from "react";
 import {
     Animated,
-    ActivityIndicator,
     Text,
-    TouchableOpacity,
     View,
-    Image,
     Pressable,
-    BackHandler,
-    Button,
     StyleSheet
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -17,6 +12,7 @@ import { MenuStackList } from "../navigation/MenuNavigator";
 import { menuType, menuData, MENU, menuList } from "../services/menuItems";
 import { styles } from "../styles/styles";
 import { ScrollView } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 type Props = NativeStackScreenProps<MenuStackList, "Menu">;
@@ -26,9 +22,30 @@ type Props = NativeStackScreenProps<MenuStackList, "Menu">;
 
 export default function MenuScreen({ navigation, route }: Props) {
 
+    const fadeAnimation = useRef(new Animated.Value(1)).current;
+ 
+    useFocusEffect(
+        React.useCallback(() => {
+            Animated.timing(fadeAnimation, {toValue: 1, duration: 300, useNativeDriver: true}).start()
+            return () => {
+                fadeAnimation.setValue(0);
+            }}, [])
+    )
+
     const [selectedItem, setSelectedItem] = useState<menuType>(route.params?.selectedType || "Starter");
     const itemCount = menuData[selectedItem].length
     const [itemAdded, setItemAdded] = useState<string[]>([]);
+    
+
+    
+    useFocusEffect(
+        /* (Satya164, n.d.) */
+        React.useCallback(() => {
+            return () => {
+                navigation.navigate('SelectMenu');
+            };
+        }, [navigation])
+    );
 
     var totalCost = 0
 
@@ -55,6 +72,7 @@ export default function MenuScreen({ navigation, route }: Props) {
 
 
     return (
+        <Animated.View style={{opacity: fadeAnimation, flex: 1}}>
         <SafeAreaView style={[styles.container, { padding: 20 }]}>
 
             <ScrollView showsVerticalScrollIndicator={false}>
@@ -101,14 +119,15 @@ export default function MenuScreen({ navigation, route }: Props) {
 
 
                 <View style={styles.container}>
-                    <Pressable style={styles.pressableButton} onPress={() => navigation.goBack()}>
+                    <Pressable style={styles.pressableButton} onPress={() => navigation.navigate("SelectMenu")}>
                         <Text style={styles.buttonText}>Go back</Text>
                     </Pressable>
                 </View>
 
             </ScrollView>
 
-        </SafeAreaView >
+        </SafeAreaView>
+        </Animated.View>
     );
 }
 

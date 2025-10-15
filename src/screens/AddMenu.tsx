@@ -14,7 +14,7 @@ import {
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { menuData, menuType, MENU } from "../services/menuItems";
+import { menuData, menuType, MENU, } from "../services/menuItems";
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { styles } from "../styles/styles";
 import { TextInput } from "react-native-gesture-handler";
