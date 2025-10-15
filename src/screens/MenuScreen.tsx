@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import {
+    Alert,
     Animated,
     Text,
     View,
@@ -10,9 +11,10 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MenuStackList } from "../navigation/MenuNavigator";
 import { menuType, menuData, MENU, menuList } from "../services/menuItems";
-import { styles } from "../styles/styles";
+import { styles, categoryStyle } from "../styles/styles";
 import { ScrollView } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
+import { useMenu } from "../services/MenuContext"
 
 
 type Props = NativeStackScreenProps<MenuStackList, "Menu">;
@@ -21,6 +23,8 @@ type Props = NativeStackScreenProps<MenuStackList, "Menu">;
 
 
 export default function MenuScreen({ navigation, route }: Props) {
+    // (Adedotun, n.d.) 
+    const { menuList, addToMenu, removeFromMenu } = useMenu();
 
     const fadeAnimation = useRef(new Animated.Value(1)).current;
  
@@ -34,7 +38,7 @@ export default function MenuScreen({ navigation, route }: Props) {
 
     const [selectedItem, setSelectedItem] = useState<menuType>(route.params?.selectedType || "Starter");
     const itemCount = menuData[selectedItem].length
-    const [itemAdded, setItemAdded] = useState<string[]>([]);
+
     
 
     
@@ -54,20 +58,22 @@ export default function MenuScreen({ navigation, route }: Props) {
     }
 
     const addToSelection = (item: MENU) => {
-        menuList.push(item);
-        setItemAdded(prev => [...prev, item.Name])
+        console.log('Attempting to add item:', item.Name);
+    try {
+        addToMenu(item);
+        console.log('Item added successfully');
+    } catch (error) {
+        console.error('Error adding item:', error);
+        Alert.alert('Error', 'Failed to add item to menu');
+        }
     };
 
     const removeFromSelection = (item: MENU) => {
-        const index = menuList.findIndex(menuList => menuList.Name === item.Name)
-        if (index > -1) {
-            menuList.splice(index, 1)
-        }
-        setItemAdded(prev => prev.filter(name => name !== item.Name))
+        removeFromMenu(item.Name);
     }
 
     const isItemSelected = (item: string) => {
-        return itemAdded.includes(item);
+        return menuList.some(menuItem => menuItem.Name === item);
     }
 
 
@@ -130,33 +136,3 @@ export default function MenuScreen({ navigation, route }: Props) {
         </Animated.View>
     );
 }
-
-const categoryStyle = StyleSheet.create({
-
-    categories: {
-        padding: 15,
-        gap: 5,
-        backgroundColor: '#2F2F2F',
-        borderRadius: 15,
-        width: '100%',
-        minWidth: '50%',
-        maxWidth: 'auto'
-    },
-    name: {
-        color: '#FFF',
-        fontWeight: 'bold',
-        fontSize: 18,
-    },
-
-    description: {
-        color: '#fff',
-        marginVertical: 5,
-    },
-
-    price: {
-        color: '#F8BD06',
-        fontSize: 16
-    }
-
-
-})

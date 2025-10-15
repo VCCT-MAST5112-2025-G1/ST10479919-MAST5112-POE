@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MenuStackList } from "../navigation/MenuNavigator";
-import { menuType, menuData, MENU } from "../services/menuItems";
+import { menuType } from "../services/menuItems";
 import { styles } from "../styles/styles";
 import { useFocusEffect } from '@react-navigation/native';
 
@@ -64,6 +64,3 @@ export default function SelectMenu({ navigation }: Props) {
         </Animated.View>
     )
 }
-
-
-

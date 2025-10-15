@@ -78,3 +78,28 @@ export const styles = StyleSheet.create({
     },
 
 })
+
+export const categoryStyle = StyleSheet.create({
+    categories: {
+        padding: 15,
+        gap: 5,
+        backgroundColor: '#2F2F2F',
+        borderRadius: 15,
+        width: '100%',
+        minWidth: '50%',
+        maxWidth: 'auto'
+    },
+    name: {
+        color: '#FFF',
+        fontWeight: 'bold',
+        fontSize: 18,
+    },
+    description: {
+        color: '#fff',
+        marginVertical: 5,
+    },
+    price: {
+        color: '#F8BD06',
+        fontSize: 16
+    }
+});
