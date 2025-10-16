@@ -1,30 +1,21 @@
 import React, { useState } from "react";
 import {
     Alert,
-    ActivityIndicator,
     Text,
-    TouchableOpacity,
     View,
-    Image,
     Pressable,
-    BackHandler,
-    Button,
-    StyleSheet
 } from "react-native";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { menuData, menuType, MENU, } from "../services/menuItems";
+import { menuData, menuType, MENU } from "../services/menuItems";
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { styles } from "../styles/styles";
 import { TextInput } from "react-native-gesture-handler";
 import { RootTabParamList } from "../navigation/AppNavigator";
 
-
 type Props = BottomTabScreenProps<RootTabParamList, "Add">;
 
 export default function AddMenu({ navigation }: Props) {
-
     const [itemName, setItemName] = useState("");
     const [itemDesc, setItemDesc] = useState("");
     const [itemPrice, setItemPrice] = useState("");
@@ -71,8 +62,16 @@ export default function AddMenu({ navigation }: Props) {
 
     return (
         <SafeAreaView style={styles.container}>
-            <GestureHandlerRootView>
-                <ScrollView contentContainerStyle={{ gap: 30 }}>
+            <GestureHandlerRootView style={{ width: '100%' }}>
+                <ScrollView contentContainerStyle={{ gap: 25, paddingVertical: 10 }}>
+                    
+                    {/* Header */}
+                    <View style={{ alignItems: 'center', marginBottom: 10 }}>
+                        <Text style={styles.titleText}>Add Menu Items</Text>
+                        <Text style={[styles.textStyle, { color: '#b0b0b0', textAlign: 'center' }]}>
+                            Create new dishes for your menu
+                        </Text>
+                    </View>
 
                     <View style={styles.switchContainer}>
                         <Pressable style={[styles.pressableButton, selectedItem === "Starter" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Starter")}>
@@ -88,7 +87,7 @@ export default function AddMenu({ navigation }: Props) {
                         </Pressable>
                     </View>
 
-                    <TextInput style={menuStyle.inputStyle} placeholder="Name" placeholderTextColor={'#fff'} value={itemName} onChangeText={setItemName}></TextInput>
+                    <TextInput style={styles.inputStyle} placeholder="Name" placeholderTextColor={'#b0b0b0'} value={itemName} onChangeText={setItemName}></TextInput>
 
                     {itemName.length <= 20 ? (
                         null
@@ -98,7 +97,7 @@ export default function AddMenu({ navigation }: Props) {
                         )
                     }
 
-                    <TextInput style={menuStyle.inputStyle} placeholder="Description" placeholderTextColor={'#fff'} value={itemDesc} onChangeText={setItemDesc}></TextInput>
+                    <TextInput style={styles.inputStyle} placeholder="Description" placeholderTextColor={'#b0b0b0'} value={itemDesc} onChangeText={setItemDesc}></TextInput>
 
                     {(itemDesc.length <= 40) ? (
                         null
@@ -107,12 +106,13 @@ export default function AddMenu({ navigation }: Props) {
                             <View><Text style={styles.errorText}>Please enter only up to 40 characters for the description</Text></View>
                         )}
 
-                    <TextInput style={menuStyle.inputStyle} placeholder="Price" placeholderTextColor={'#fff'} keyboardType="numeric" value={itemPrice} onChangeText={setItemPrice}></TextInput>
+                    <TextInput style={styles.inputStyle} placeholder="Price" placeholderTextColor={'#b0b0b0'} keyboardType="numeric" value={itemPrice} onChangeText={setItemPrice}></TextInput>
                     {(itemPrice && !isNaN(parseInt(itemPrice)) && parseInt(itemPrice) >= 0) ? (
                         null
                     ) : (
                         <View><Text style={styles.errorText}>Please enter a valid price</Text></View>
                     )}
+                    
                     <View style={styles.container}>
                         <Pressable style={styles.pressableButton} onPress={addItem}>
                             <Text style={styles.textStyle}>Confirm</Text>
@@ -124,37 +124,3 @@ export default function AddMenu({ navigation }: Props) {
         </SafeAreaView>
     );
 }
-
-const menuStyle = StyleSheet.create({
-
-    itemName: {
-        color: "#fff",
-        fontSize: 16,
-        gap: 20,
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    rightGrouping: {
-        flexDirection: 'row',
-        gap: 5,
-        padding: 5,
-    },
-    itemGroup: {
-        flexDirection: 'row',
-        backgroundColor: "#2F2F2F",
-        padding: 5,
-        gap: 10,
-        borderRadius: 50
-    },
-    inputStyle: {
-        height: 50,
-        borderColor: '#2F2F2F',
-        backgroundColor: '#2F2F2F',
-        borderWidth: 5,
-        borderRadius: 30,
-        paddingHorizontal: 30,
-        color: '#fff',
-        fontSize: 16,
-    },
-})

@@ -1,66 +1,132 @@
-import React, { useState, useRef } from "react";
+import React, { useRef } from "react";
 import {
     Animated,
-    ActivityIndicator,
     Text,
-    TouchableOpacity,
     View,
-    Image,
     Pressable,
-    BackHandler,
-    Button,
-    StyleSheet,
+    Alert,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MenuStackList } from "../navigation/MenuNavigator";
-import { menuType } from "../services/menuItems";
 import { styles } from "../styles/styles";
 import { useFocusEffect } from '@react-navigation/native';
+import { menuType, menuData, populateTestData, } from "../services/menuItems";
+import { useMenu } from "../services/MenuContext"
 
 type Props = NativeStackScreenProps<MenuStackList, "SelectMenu">;
 
-
 export default function SelectMenu({ navigation }: Props) {
-       const fadeAnimation = useRef(new Animated.Value(1)).current;
-     
-        useFocusEffect(
-            React.useCallback(() => {
-                Animated.timing(fadeAnimation, {toValue: 1, duration: 300, useNativeDriver: true}).start()
-                return () => {
-                    fadeAnimation.setValue(0);
-                }}, [])
-        )
+    const { resetMenu } = useMenu();
+    const fadeAniHandle = useRef(new Animated.Value(1)).current; 
+    
+    const shakeAniHandle = () => {
+        const shakeAni = useRef(new Animated.Value(0)).current
+
+        const startShake = () => {
+            shakeAni.setValue(0)
+            Animated.sequence([
+                Animated.timing(shakeAni, { toValue: 10, duration: 50, useNativeDriver: true}),
+                Animated.timing(shakeAni, { toValue: -10, duration: 50, useNativeDriver: true}),
+                Animated.timing(shakeAni, { toValue: 10, duration: 50, useNativeDriver: true}),
+                Animated.timing(shakeAni, { toValue: 0, duration: 50, useNativeDriver: true}),
+            ]).start();
+        }
+
+        const animatedStyle = {
+            transform: [{ translateX: shakeAni}]
+        }
+    }
+
+    useFocusEffect(
+        React.useCallback(() => {
+            Animated.timing(fadeAniHandle, {toValue: 1, duration: 300, useNativeDriver: true}).start()
+            return () => {
+                fadeAniHandle.setValue(0);
+            }}, [])
+    )
 
     const handleCategorySelect = (category: menuType) => {
         navigation.navigate("Menu", { selectedType: category });
     }
 
+    const resetMenuList = () => {
+        Alert.alert(
+            'Are you sure?', 
+            'This is NOT reversible',
+            [
+                {
+                    text: 'Cancel',
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        resetMenu()
+                        menuData.Starter = []
+                        menuData.Main = []
+                        menuData.Dessert = []
+                        Alert.alert("Items reset", "All items removed from menu")
+                    }
+                },
+            ],
+            {
+                cancelable: true,
+            }
+        );
+    }
+
     return (
-        <Animated.View style={{opacity: fadeAnimation, flex: 1}}>
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.titleText}>
-                Select category
-            </Text>
+        <Animated.View style={{opacity: fadeAniHandle, flex: 1}}>
+            <SafeAreaView style={styles.container}>
+                
+                <View style={{ alignItems: 'center', marginBottom: 30 }}>
+                    <Text style={styles.titleText}>Menu Categories</Text>
+                    <Text style={[styles.textStyle, { color: '#b0b0b0', textAlign: 'center' }]}>
+                        Choose a category to explore
+                    </Text>
+                </View>
 
-            <View style={styles.container}>
-                <Pressable
-                    style={[styles.pressableButton, { width: '50%' }]} onPress={() => handleCategorySelect("Starter")}>
-                    <Text style={styles.buttonText}>Starters</Text>
-                </Pressable>
+                <View style={{ width: '100%', gap: 15 }}>
+                    <Pressable
+                        style={[styles.pressableButton, { width: '100%' }]} 
+                        onPress={() => handleCategorySelect("Starter")}
+                    >
+                        <Text style={styles.buttonText}>Starters</Text>
+                    </Pressable>
 
-                <Pressable
-                    style={[styles.pressableButton, { width: '50%' }]} onPress={() => handleCategorySelect("Main")}>
-                    <Text style={styles.buttonText}>Mains</Text>
-                </Pressable>
+                    <Pressable
+                        style={[styles.pressableButton, { width: '100%' }]} 
+                        onPress={() => handleCategorySelect("Main")}
+                    >
+                        <Text style={styles.buttonText}>Mains</Text>
+                    </Pressable>
 
-                <Pressable
-                    style={[styles.pressableButton, { width: '50%' }]} onPress={() => handleCategorySelect("Dessert")}>
-                    <Text style={styles.buttonText}>Desserts</Text>
-                </Pressable>
+                    <Pressable
+                        style={[styles.pressableButton, { width: '100%' }]} 
+                        onPress={() => handleCategorySelect("Dessert")}
+                    >
+                        <Text style={styles.buttonText}>Desserts</Text>
+                    </Pressable>
+                </View>
 
-            </View>
-        </SafeAreaView>
+                <View style={{ marginTop: 30, gap: 10, width: '100%' }}>
+                    <Pressable
+                        style={[styles.pressableButton, { width: '100%', backgroundColor: '#4CAF50' }]} 
+                        onPress={() =>{populateTestData()}}
+                    >
+                        <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Enter Test Data</Text>
+                    </Pressable>
+                    
+                    <Pressable
+                        style={[styles.pressableButton, { width: '100%', backgroundColor: '#FF4444' }]} 
+                        onPress={() => {resetMenuList()}}
+                    >
+                        <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Reset Menu</Text>
+                    </Pressable>
+                </View>
+
+            </SafeAreaView>
         </Animated.View>
     )
 }

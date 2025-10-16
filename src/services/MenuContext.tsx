@@ -8,6 +8,7 @@ interface MenuContext {
     menuList: MENU[];
     addToMenu: (item: MENU) => void;
     removeFromMenu: (itemName: string) => void;
+    resetMenu: () => void;
 }
 
 const MenuContext = createContext<MenuContext | undefined>(undefined);
@@ -19,7 +20,6 @@ export const MenuProvider: React.FC<{children: React.ReactNode}> = ({ children }
         console.log('Adding item to context:', item.Name);
         try {
             setMenuList(current => {
-                console.log('Current menuList length:', current.length);
                 return [...current, item];
             });
         } catch (error) {
@@ -36,10 +36,17 @@ export const MenuProvider: React.FC<{children: React.ReactNode}> = ({ children }
         }
     }
 
+     const resetMenu = () => {
+        setMenuList([]);
+        menuList.length = 0;
+    }
+
+
     const contextValue = {
         menuList,
         addToMenu,
-        removeFromMenu
+        removeFromMenu,
+        resetMenu,
     };
 
     return(
@@ -52,7 +59,7 @@ export const MenuProvider: React.FC<{children: React.ReactNode}> = ({ children }
 export const useMenu = () => {
     const context = useContext(MenuContext);
     if (context === undefined) {
-        throw new Error("useMenu must be used within MenuProvider");
+        throw new Error("Error in using context");
     }
     return context;
 }

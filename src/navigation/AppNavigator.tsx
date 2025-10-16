@@ -1,5 +1,5 @@
 import React, {useRef} from "react";
-import { Animated } from "react-native";
+import { Animated, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { enableScreens } from 'react-native-screens'
 import HomeScreen from "../screens/HomeScreen";
@@ -14,9 +14,40 @@ export type RootTabParamList = {
 }
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
+const HomeIcon = ({ focused, color }: { focused: boolean; color: string }) => (
+    <View style={styles.iconContainer}>
+        <Text style={[styles.asciiIcon, { color }]}>
+            {focused ? 
+                "╔═══╗\n║ • ║\n╚═══╝" : 
+                "┌───┐\n│   │\n└───┘"
+            }
+        </Text>
+    </View>
+);
+
+const AddIcon = ({ focused, color }: { focused: boolean; color: string }) => (
+    <View style={styles.iconContainer}>
+        <Text style={[styles.asciiIcon, { color }]}>
+            {focused ? 
+                "╭───╮\n│ + │\n╰───╯" : 
+                "┌───┐\n│ + │\n└───┘"
+            }
+        </Text>
+    </View>
+);
+
+const MenuIcon = ({ focused, color }: { focused: boolean; color: string }) => (
+    <View style={styles.iconContainer}>
+        <Text style={[styles.asciiIcon, { color }]}>
+            {focused ? 
+                "≡≡≡≡≡\n≡ ≡ ≡\n≡≡≡≡≡" : 
+                "•••••\n• • •\n•••••"
+            }
+        </Text>
+    </View>
+);
 
 export default function AppNavigator() {
-
     const fadeAnimation = useRef(new Animated.Value(1)).current;
 
     enableScreens(true)
@@ -35,23 +66,29 @@ export default function AppNavigator() {
             tabBarStyle: {
                 backgroundColor: "#212121",
                 borderTopColor: "#2F2F2F",
+                height: 70,
+                paddingBottom: 12,
+                paddingTop: 8,
             },
             tabBarActiveTintColor: "#F8BD06",
-            tabBarInactiveTintColor: "#FFFFFF",
+            tabBarInactiveTintColor: "#888888",
+            tabBarLabelStyle: {
+                fontSize: 12,
+                fontWeight: '500',
+                marginTop: 4,
+            },
             sceneStyle: {
                 backgroundColor: "#212121"
-
             }
         }}>
-
 
             <Tab.Screen
                 name="Home"
                 component={HomeScreen}
                 options={{
                     title: "Home",
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <Text style={{ color, fontSize: size }}>家</Text>
+                    tabBarIcon: ({ focused, color }) => (
+                        <HomeIcon focused={focused} color={color} />
                     )
                 }}
             />
@@ -61,8 +98,8 @@ export default function AppNavigator() {
                 component={AddMenu}
                 options={{
                     title: "Add Items",
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <Text style={{ color, fontSize: size }}>+</Text>
+                    tabBarIcon: ({ focused, color }) => (
+                        <AddIcon focused={focused} color={color} />
                     )
                 }}
             />
@@ -72,11 +109,26 @@ export default function AppNavigator() {
                 component={MenuNavigator}
                 options={{
                     title: "Menu",
-                    tabBarIcon: ({ focused, color, size }) => (
-                        <Text style={{ color, fontSize: size }}>☰</Text>
+                    tabBarIcon: ({ focused, color }) => (
+                        <MenuIcon focused={focused} color={color} />
                     )
                 }}
             />
         </Tab.Navigator>
     )
 }
+
+const styles = StyleSheet.create({
+    iconContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 4,
+    },
+    asciiIcon: {
+        fontSize: 8,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        lineHeight: 9,
+        includeFontPadding: false,
+    },
+});

@@ -1,9 +1,8 @@
-import React, {useRef} from "react";
-import { Animated } from "react-native";
+import React from "react";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SelectMenu from "../screens/MenuSelectScreen";
 import MenuScreen from "../screens/MenuScreen";
-import { useFocusEffect } from "@react-navigation/native";
 
 
 export type MenuStackList = {
