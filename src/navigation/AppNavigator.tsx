@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, { useRef } from "react";
 import { Animated, StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { enableScreens } from 'react-native-screens'
@@ -13,14 +13,12 @@ export type RootTabParamList = {
     Add: undefined
 }
 
+// TODO: Icon change
+
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const HomeIcon = ({ focused, color }: { focused: boolean; color: string }) => (
     <View style={styles.iconContainer}>
         <Text style={[styles.asciiIcon, { color }]}>
-            {focused ? 
-                "╔═══╗\n║ • ║\n╚═══╝" : 
-                "┌───┐\n│   │\n└───┘"
-            }
         </Text>
     </View>
 );
@@ -28,59 +26,51 @@ const HomeIcon = ({ focused, color }: { focused: boolean; color: string }) => (
 const AddIcon = ({ focused, color }: { focused: boolean; color: string }) => (
     <View style={styles.iconContainer}>
         <Text style={[styles.asciiIcon, { color }]}>
-            {focused ? 
-                "╭───╮\n│ + │\n╰───╯" : 
-                "┌───┐\n│ + │\n└───┘"
-            }
         </Text>
     </View>
 );
-
+/*
 const MenuIcon = ({ focused, color }: { focused: boolean; color: string }) => (
     <View style={styles.iconContainer}>
         <Text style={[styles.asciiIcon, { color }]}>
-            {focused ? 
-                "≡≡≡≡≡\n≡ ≡ ≡\n≡≡≡≡≡" : 
-                "•••••\n• • •\n•••••"
-            }
         </Text>
     </View>
 );
-
+*/
 export default function AppNavigator() {
     const fadeAnimation = useRef(new Animated.Value(1)).current;
 
     enableScreens(true)
     return (
-        <Tab.Navigator 
-        screenListeners={( { navigation }) => ({
-            tabPress: (e) => {
-                Animated.sequence([
-                    Animated.timing(fadeAnimation, { toValue: 0, duration: 150, useNativeDriver: true }),
-                    Animated.timing(fadeAnimation, { toValue: 1, duration: 150, useNativeDriver: true}),
-                ]).start()
-            }
-        })}
-        screenOptions={{
-            headerShown: false,
-            tabBarStyle: {
-                backgroundColor: "#212121",
-                borderTopColor: "#2F2F2F",
-                height: 70,
-                paddingBottom: 12,
-                paddingTop: 8,
-            },
-            tabBarActiveTintColor: "#F8BD06",
-            tabBarInactiveTintColor: "#888888",
-            tabBarLabelStyle: {
-                fontSize: 12,
-                fontWeight: '500',
-                marginTop: 4,
-            },
-            sceneStyle: {
-                backgroundColor: "#212121"
-            }
-        }}>
+        <Tab.Navigator
+            screenListeners={({ navigation }) => ({
+                tabPress: (e) => {
+                    Animated.sequence([
+                        Animated.timing(fadeAnimation, { toValue: 0, duration: 150, useNativeDriver: true }),
+                        Animated.timing(fadeAnimation, { toValue: 1, duration: 150, useNativeDriver: true }),
+                    ]).start()
+                }
+            })}
+            screenOptions={{
+                headerShown: false,
+                tabBarStyle: {
+                    backgroundColor: "#212121",
+                    borderTopColor: "#2F2F2F",
+                    height: 70,
+                    paddingBottom: 12,
+                    paddingTop: 8,
+                },
+                tabBarActiveTintColor: "#F8BD06",
+                tabBarInactiveTintColor: "#888888",
+                tabBarLabelStyle: {
+                    fontSize: 12,
+                    fontWeight: '500',
+                    marginTop: 4,
+                },
+                sceneStyle: {
+                    backgroundColor: "#212121"
+                }
+            }}>
 
             <Tab.Screen
                 name="Home"
@@ -103,7 +93,7 @@ export default function AppNavigator() {
                     )
                 }}
             />
-
+            {/*
             <Tab.Screen
                 name="SelectMenu"
                 component={MenuNavigator}
@@ -114,6 +104,7 @@ export default function AppNavigator() {
                     )
                 }}
             />
+            */}
         </Tab.Navigator>
     )
 }

@@ -20,13 +20,14 @@ type Props = NativeStackScreenProps<MenuStackList, "Menu">;
 export default function MenuScreen({ navigation, route }: Props) {
     const { menuList, addToMenu, removeFromMenu } = useMenu();
     const fadeAnimation = useRef(new Animated.Value(1)).current;
- 
+
     useFocusEffect(
         React.useCallback(() => {
-            Animated.timing(fadeAnimation, {toValue: 1, duration: 300, useNativeDriver: true}).start()
+            Animated.timing(fadeAnimation, { toValue: 1, duration: 300, useNativeDriver: true }).start()
             return () => {
                 fadeAnimation.setValue(0);
-            }}, [])
+            }
+        }, [])
     )
 
     const [selectedItem, setSelectedItem] = useState<menuType>(route.params?.selectedType || "Starter");
@@ -65,34 +66,34 @@ export default function MenuScreen({ navigation, route }: Props) {
     }
 
     return (
-        <Animated.View style={{opacity: fadeAnimation, flex: 1}}>
+        <Animated.View style={{ opacity: fadeAnimation, flex: 1 }}>
             <SafeAreaView style={[styles.container, { padding: 20 }]}>
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: 20 }}>
 
                     {itemCount === 0 ? (
                         <View style={styles.container}>
                             <Text style={styles.titleText}>{selectedItem}s</Text>
-                            <Text style={[styles.textStyle, { textAlign: "center", color: '#b0b0b0' }]}> 
-                                No items to display. Add some! 
+                            <Text style={[styles.textStyle, { textAlign: "center", color: '#b0b0b0' }]}>
+                                No items to display. Add some!
                             </Text>
                         </View>
                     ) : (
                         <>
                             <View style={{ gap: 20 }}>
                                 <Text style={styles.titleText}>{`${selectedItem}s`}</Text>
-                                
+
                                 <View style={styles.card}>
-                                    
+
                                     <Text style={styles.textStyle}>{`Total items in ${selectedItem}s: ${itemCount}`}</Text>
                                     <Text style={styles.textStyle}>{`Total cost of ${selectedItem} items: R${totalCost}`}</Text>
-                                    
+
                                 </View>
 
                                 {menuData[selectedItem].map((item, index) => {
                                     const isAdded = isItemSelected(item.Name);
                                     return (
                                         <View key={index} style={categoryStyle.categories}>
-                                        <Text style={categoryStyle.name}>{`${item.Name}`}</Text>
+                                            <Text style={categoryStyle.name}>{`${item.Name}`}</Text>
                                             <Text style={categoryStyle.description}>{`${item.Description}`}</Text>
                                             <Text style={categoryStyle.price}>{`R${item.Price}`}</Text>
                                             <Pressable

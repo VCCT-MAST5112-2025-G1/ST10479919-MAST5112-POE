@@ -10,6 +10,7 @@ export type MENU = {
 export type menuType = "Starter" | "Main" | "Dessert"
 
 // Name, Des, Price
+// Filter list from selected items in menuData
 export var menuList: MENU[] = [];
 
 export var menuData: Record<menuType, MENU[]> = {
@@ -34,7 +35,7 @@ export const resetMenuAdded = () => {
 
 // Testing button
 export const populateTestData = () => {
-    
+
     resetMenuAdded()
 
     menuData.Starter = [

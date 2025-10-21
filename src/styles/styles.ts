@@ -1,18 +1,16 @@
 import { StyleSheet } from "react-native"
 
 export const styles = StyleSheet.create({
-    // === Layout === //
+
     container: {
-        flex: 1,
+        flexGrow: 1,
         backgroundColor: "#212121",
         flexDirection: 'column',
-        gap: 20,
-        padding: 10,
-        alignItems: 'center',
+        gap: 5,
+        padding: 5,
         justifyContent: 'center',
     },
 
-    // === Text === //
     textStyle: {
         color: '#FFFFFF',
         fontSize: 16,
@@ -41,13 +39,13 @@ export const styles = StyleSheet.create({
         marginBottom: 30,
     },
 
-    // === Buttons === //
     switchContainer: {
         flexDirection: 'row',
         padding: 4,
         gap: 20,
         backgroundColor: "#2F2F2F",
-        borderRadius: 50
+        borderRadius: 50,
+        maxWidth: "100%",
     },
 
     pressableButton: {
@@ -85,10 +83,20 @@ export const styles = StyleSheet.create({
         padding: 15,
     },
 
-    // === Inputs === //
     inputStyle: {
         height: 50,
         borderColor: '#2F2F2F',
+        backgroundColor: '#2F2F2F',
+        borderWidth: 2,
+        borderRadius: 30,
+        paddingHorizontal: 30,
+        color: '#fff',
+        fontSize: 16,
+    },
+
+    inputStyleError: {
+        height: 50,
+        borderColor: '#ff0000',
         backgroundColor: '#2F2F2F',
         borderWidth: 2,
         borderRadius: 30,
@@ -105,11 +113,10 @@ export const styles = StyleSheet.create({
         marginLeft: 5,
     },
 
-    // === Cards & Containers === //
     card: {
         backgroundColor: '#2a2a2a',
         borderRadius: 16,
-        padding: 20,
+        padding: 15,
         marginVertical: 8,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 4 },
@@ -120,7 +127,6 @@ export const styles = StyleSheet.create({
         borderLeftColor: '#FFC72C',
     },
 
-    // === Messages === //
     successText: {
         color: "#00ff00",
         textAlign: 'center'
@@ -133,36 +139,35 @@ export const styles = StyleSheet.create({
         marginTop: 5,
     },
 
-    // === State handles === //
     managementSection: {
         marginTop: 20,
         gap: 15,
     },
 
     managementTitle: {
-        textAlign: 'center', 
-        fontSize: 18, 
+        textAlign: 'center',
+        fontSize: 18,
         fontWeight: '600',
         marginBottom: 10,
         color: '#FFFFFF'
     },
 
     statsContainer: {
-        backgroundColor: '#2a2a2a', 
-        padding: 15, 
+        backgroundColor: '#2a2a2a',
+        padding: 15,
         borderRadius: 10,
         marginTop: 10,
     },
 
     statsTitle: {
-        textAlign: 'center', 
+        textAlign: 'center',
         marginBottom: 8,
         fontWeight: '600',
         color: '#FFFFFF'
     },
 
     statsRow: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
         justifyContent: 'space-between',
     },
 
@@ -172,7 +177,7 @@ export const styles = StyleSheet.create({
     },
 
     statsTotal: {
-        textAlign: 'center', 
+        textAlign: 'center',
         marginTop: 8,
         color: '#FFC72C',
         fontWeight: '600'
@@ -181,7 +186,7 @@ export const styles = StyleSheet.create({
 
 export const categoryStyle = StyleSheet.create({
     categories: {
-        padding: 15,
+        padding: 12,
         gap: 5,
         backgroundColor: '#2F2F2F',
         borderRadius: 15,
