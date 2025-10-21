@@ -6,6 +6,8 @@ import HomeScreen from "../screens/HomeScreen";
 import AddMenu from '../screens/AddMenu'
 import { Text, View } from "react-native";
 import MenuNavigator from "./MenuNavigator";
+import { MaterialIcons } from '@react-native-vector-icons/material-icons';
+
 
 export type RootTabParamList = {
     Home: undefined;
@@ -18,25 +20,34 @@ export type RootTabParamList = {
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const HomeIcon = ({ focused, color }: { focused: boolean; color: string }) => (
     <View style={styles.iconContainer}>
-        <Text style={[styles.asciiIcon, { color }]}>
-        </Text>
+        <MaterialIcons
+            name={focused ? "home" : "home"}
+            size={24}
+            color={color}
+        />
     </View>
 );
 
 const AddIcon = ({ focused, color }: { focused: boolean; color: string }) => (
     <View style={styles.iconContainer}>
-        <Text style={[styles.asciiIcon, { color }]}>
-        </Text>
+        <MaterialIcons
+            name={focused ? "add-circle" : "add-circle-outline"}
+            size={24}
+            color={color}
+        />
     </View>
 );
-/*
+
 const MenuIcon = ({ focused, color }: { focused: boolean; color: string }) => (
     <View style={styles.iconContainer}>
-        <Text style={[styles.asciiIcon, { color }]}>
-        </Text>
+        <MaterialIcons
+            name={focused ? "restaurant" : "restaurant-menu"}
+            size={24}
+            color={color}
+        />
     </View>
 );
-*/
+
 export default function AppNavigator() {
     const fadeAnimation = useRef(new Animated.Value(1)).current;
 
