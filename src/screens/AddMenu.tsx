@@ -7,13 +7,12 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { menuData, menuType, MENU } from "../services/menuItems";
+import { menuData, menuType, MENU, populateTestData } from "../services/menuItems";
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { styles } from "../styles/styles";
 import { TextInput } from "react-native-gesture-handler";
 import { RootTabParamList } from "../navigation/AppNavigator";
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import { useFocusEffect } from "@react-navigation/native";
 
 type Props = BottomTabScreenProps<RootTabParamList, "Add">;
 
@@ -121,6 +120,12 @@ export default function AddMenu({ navigation }: Props) {
                         <View style={styles.container}>
                             <Pressable style={styles.pressableButton} onPress={addItem}>
                                 <Text style={styles.textStyle}>Confirm</Text>
+                            </Pressable>
+                        </View>
+
+                        <View style={styles.container}>
+                            <Pressable style={styles.pressableButton} onPress={populateTestData}>
+                                <Text style={styles.textStyle}>Populate test data</Text>
                             </Pressable>
                         </View>
 

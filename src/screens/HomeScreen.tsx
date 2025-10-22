@@ -121,7 +121,7 @@ export default function HomeScreen({ navigation }: Props) {
               </View>
             ) : null}
 
-            <Pressable style={[styles.pressableButton, { width: '100%', backgroundColor: '#FF4444' }]} onPress={() => { resetMenuList() }}>
+            <Pressable style={[styles.pressableButton, { width: '50%', alignSelf: "center", backgroundColor: '#FF4444' }]} onPress={() => { resetMenuList() }}>
               <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Reset Menu</Text>
             </Pressable>
           </>
