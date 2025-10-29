@@ -74,7 +74,7 @@ export default function MenuScreen({ navigation, route }: Props) {
                         <View style={styles.container}>
                             <Text style={styles.titleText}>{selectedItem}s</Text>
                             <Text style={[styles.textStyle, { textAlign: "center", color: '#b0b0b0' }]}>
-                                No items to display. Add some!
+                                No items added. Add some in the "Add items" menu!
                             </Text>
                         </View>
                     ) : (
@@ -100,7 +100,7 @@ export default function MenuScreen({ navigation, route }: Props) {
                                                 style={[styles.pressableButton, { marginTop: 10 }, isAdded && { backgroundColor: "#FF4444" }]}
                                                 onPress={() => isAdded ? removeFromSelection(item) : addToSelection(item)}
                                             >
-                                                <Text style={styles.textStyle}>{isAdded ? "Remove Item" : "Add Item"}</Text>
+                                                <Text style={styles.textStyle}> {isAdded ? "Remove Item" : "Add Item"} </Text>
                                             </Pressable>
                                         </View>
                                     )
