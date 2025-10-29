@@ -15,6 +15,8 @@ export type RootTabParamList = {
     Add: undefined
 }
 
+// TODO: Icon change
+
 const Tab = createBottomTabNavigator<RootTabParamList>();
 const HomeIcon = ({ focused, color }: { focused: boolean; color: string }) => (
     <View style={styles.iconContainer}>
@@ -102,7 +104,7 @@ export default function AppNavigator() {
                     )
                 }}
             />
-
+            {/*
             <Tab.Screen
                 name="SelectMenu"
                 component={MenuNavigator}
@@ -113,6 +115,7 @@ export default function AppNavigator() {
                     )
                 }}
             />
+            */}
         </Tab.Navigator>
     )
 }

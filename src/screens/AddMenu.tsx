@@ -123,6 +123,12 @@ export default function AddMenu({ navigation }: Props) {
                             </Pressable>
                         </View>
 
+                        <View style={styles.container}>
+                            <Pressable style={styles.pressableButton} onPress={populateTestData}>
+                                <Text style={styles.textStyle}>Populate test data</Text>
+                            </Pressable>
+                        </View>
+
                     </View>
                 </KeyboardAwareScrollView>
             </GestureHandlerRootView>
