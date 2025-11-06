@@ -19,8 +19,8 @@ type Props = NativeStackScreenProps<MenuStackList, "Menu">;
 
 export default function MenuScreen({ navigation, route }: Props) {
     const { menuList, addToMenu, removeFromMenu } = useMenu();
-    const fadeAnimation = useRef(new Animated.Value(1)).current;
 
+    const fadeAnimation = useRef(new Animated.Value(1)).current;
     useFocusEffect(
         React.useCallback(() => {
             Animated.timing(fadeAnimation, { toValue: 1, duration: 300, useNativeDriver: true }).start()
@@ -29,7 +29,7 @@ export default function MenuScreen({ navigation, route }: Props) {
             }
         }, [])
     )
-
+    // Grabs the menuType from selection. Default to Starter if anything goes wrong
     const [selectedItem, setSelectedItem] = useState<menuType>(route.params?.selectedType || "Starter");
     const itemCount = menuData[selectedItem].length
 
@@ -42,6 +42,7 @@ export default function MenuScreen({ navigation, route }: Props) {
     );
 
     var totalCost = 0
+    // Checks if itemCount isn't 0
     if (!(itemCount === 0)) {
         totalCost = menuData[selectedItem].reduce((total, item) => total + item.Price, 0)
     }

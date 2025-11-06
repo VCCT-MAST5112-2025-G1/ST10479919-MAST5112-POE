@@ -18,32 +18,15 @@ type Props = NativeStackScreenProps<MenuStackList, "SelectMenu">;
 
 export default function SelectMenu({ navigation }: Props) {
     const { resetMenu } = useMenu();
-    const fadeAniHandle = useRef(new Animated.Value(1)).current; 
-    
-    const shakeAniHandle = () => {
-        const shakeAni = useRef(new Animated.Value(0)).current
-
-        const startShake = () => {
-            shakeAni.setValue(0)
-            Animated.sequence([
-                Animated.timing(shakeAni, { toValue: 10, duration: 50, useNativeDriver: true}),
-                Animated.timing(shakeAni, { toValue: -10, duration: 50, useNativeDriver: true}),
-                Animated.timing(shakeAni, { toValue: 10, duration: 50, useNativeDriver: true}),
-                Animated.timing(shakeAni, { toValue: 0, duration: 50, useNativeDriver: true}),
-            ]).start();
-        }
-
-        const animatedStyle = {
-            transform: [{ translateX: shakeAni}]
-        }
-    }
+    const fadeAniHandle = useRef(new Animated.Value(1)).current;
 
     useFocusEffect(
         React.useCallback(() => {
-            Animated.timing(fadeAniHandle, {toValue: 1, duration: 300, useNativeDriver: true}).start()
+            Animated.timing(fadeAniHandle, { toValue: 1, duration: 300, useNativeDriver: true }).start()
             return () => {
                 fadeAniHandle.setValue(0);
-            }}, [])
+            }
+        }, [])
     )
 
     const handleCategorySelect = (category: menuType) => {
@@ -52,7 +35,7 @@ export default function SelectMenu({ navigation }: Props) {
 
     const resetMenuList = () => {
         Alert.alert(
-            'Are you sure?', 
+            'Are you sure?',
             'This is NOT reversible',
             [
                 {
@@ -77,9 +60,9 @@ export default function SelectMenu({ navigation }: Props) {
     }
 
     return (
-        <Animated.View style={{opacity: fadeAniHandle, flex: 1}}>
+        <Animated.View style={{ opacity: fadeAniHandle, flex: 1 }}>
             <SafeAreaView style={styles.container}>
-                
+
                 <View style={{ alignItems: 'center', marginBottom: 30 }}>
                     <Text style={styles.titleText}>Menu Categories</Text>
                     <Text style={[styles.textStyle, { color: '#b0b0b0', textAlign: 'center' }]}>
@@ -89,21 +72,21 @@ export default function SelectMenu({ navigation }: Props) {
 
                 <View style={{ width: '100%', gap: 15 }}>
                     <Pressable
-                        style={[styles.pressableButton, { width: '100%' }]} 
+                        style={[styles.pressableButton, { width: '100%' }]}
                         onPress={() => handleCategorySelect("Starter")}
                     >
                         <Text style={styles.buttonText}>Starters</Text>
                     </Pressable>
 
                     <Pressable
-                        style={[styles.pressableButton, { width: '100%' }]} 
+                        style={[styles.pressableButton, { width: '100%' }]}
                         onPress={() => handleCategorySelect("Main")}
                     >
                         <Text style={styles.buttonText}>Mains</Text>
                     </Pressable>
 
                     <Pressable
-                        style={[styles.pressableButton, { width: '100%' }]} 
+                        style={[styles.pressableButton, { width: '100%' }]}
                         onPress={() => handleCategorySelect("Dessert")}
                     >
                         <Text style={styles.buttonText}>Desserts</Text>
@@ -112,15 +95,15 @@ export default function SelectMenu({ navigation }: Props) {
 
                 <View style={{ marginTop: 30, gap: 10, width: '100%' }}>
                     <Pressable
-                        style={[styles.pressableButton, { width: '100%', backgroundColor: '#4CAF50' }]} 
-                        onPress={() =>{populateTestData()}}
+                        style={[styles.pressableButton, { width: '100%', backgroundColor: '#4CAF50' }]}
+                        onPress={() => { populateTestData() }}
                     >
                         <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Enter Test Data</Text>
                     </Pressable>
-                    
+
                     <Pressable
-                        style={[styles.pressableButton, { width: '100%', backgroundColor: '#FF4444' }]} 
-                        onPress={() => {resetMenuList()}}
+                        style={[styles.pressableButton, { width: '100%', backgroundColor: '#FF4444' }]}
+                        onPress={() => { resetMenuList() }}
                     >
                         <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Reset Menu</Text>
                     </Pressable>
