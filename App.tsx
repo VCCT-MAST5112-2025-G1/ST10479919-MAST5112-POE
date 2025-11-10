@@ -4,8 +4,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context'
 import AppNavigator from './src/navigation/AppNavigator'
 import { MenuProvider } from "./src/services/MenuContext";
 
-// TODO: Let screen be handled better
-
 export default function App() {
   return (
     <SafeAreaProvider>

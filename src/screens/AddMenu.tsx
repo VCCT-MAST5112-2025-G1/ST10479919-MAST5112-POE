@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
     Alert,
+    Animated,
     Text,
     View,
     Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { menuData, menuType, MENU, populateTestData } from "../services/menuItems";
+import { menuData, menuType, MENU } from "../services/menuItems";
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
+import { useFocusEffect } from "@react-navigation/native";
 import { styles } from "../styles/styles";
 import { TextInput } from "react-native-gesture-handler";
 import { RootTabParamList } from "../navigation/AppNavigator";
@@ -21,8 +23,10 @@ export default function AddMenu({ navigation }: Props) {
     const [itemName, setItemName] = useState("");
     const [itemDesc, setItemDesc] = useState("");
     const [itemPrice, setItemPrice] = useState("");
+    // Grab state for the switch, default to starter
     const [selectedItem, setSelectedItem] = useState<menuType>("Starter");
 
+    // Sets the inputs to default
     const resetInputs = () => {
         setItemName("")
         setItemDesc("")
@@ -30,18 +34,36 @@ export default function AddMenu({ navigation }: Props) {
         setHasErrors(false)
     }
 
+
+    const fadeAniHandle = useRef(new Animated.Value(1)).current;
+
+    useFocusEffect(
+        React.useCallback(() => {
+            Animated.timing(fadeAniHandle, { toValue: 1, duration: 300, useNativeDriver: true }).start()
+            return () => {
+                fadeAniHandle.setValue(0);
+            }
+        }, [])
+    )
+
+
     const addItem = () => {
+        // Basic bound checking
         const nameValid = itemName.length > 0 && itemName.length <= 20;
         const descValid = itemDesc.length > 0 && itemDesc.length <= 40;
+        // Make sure to check if item isn't empty using isNaN
         const priceValid = itemPrice && !isNaN(parseInt(itemPrice)) && parseInt(itemPrice) > 0;
 
+        // if Item is valid...
         if (nameValid && descValid && priceValid) {
+            // Bundle into properties...
             const newItem: MENU = {
                 Name: itemName,
                 Type: selectedItem,
                 Description: itemDesc,
                 Price: parseInt(itemPrice)
             }
+            // And push to menu
             menuData[selectedItem].push(newItem);
             resetInputs();
             Alert.alert("Success!", "Item has been added");
@@ -56,80 +78,76 @@ export default function AddMenu({ navigation }: Props) {
         <SafeAreaView style={styles.container}>
             <GestureHandlerRootView style={[{ width: '100%' }]}>
                 <KeyboardAwareScrollView resetScrollToCoords={{ x: 0, y: 0 }} scrollEnabled={true} showsVerticalScrollIndicator={false}>
-                    <View style={{ gap: 15 }}>
-                        <View style={{ alignItems: 'center', marginBottom: 10 }}>
-                            <Text style={styles.titleText}>Add Menu Items</Text>
-                            <Text style={[styles.textStyle, { color: '#b0b0b0', textAlign: 'center' }]}>
-                                Create new dishes for your menu
-                            </Text>
+                    <Animated.View style={{ opacity: fadeAniHandle, flex: 1 }}>
+                        <View style={{ gap: 15 }}>
+                            <View style={{ alignItems: 'center', marginBottom: 10 }}>
+                                <Text style={styles.titleText}>Add Menu Items</Text>
+                                <Text style={[styles.textStyle, { color: '#b0b0b0', textAlign: 'center' }]}>
+                                    Create new dishes for your menu
+                                </Text>
+                            </View>
+                            <View style={[styles.switchContainer, { alignSelf: "center" }]}>
+                                <Pressable style={[styles.pressableButton, selectedItem === "Starter" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Starter")}>
+                                    <Text style={[styles.switchButtonText, selectedItem === "Starter" && { color: "#F8BD06" }]}>Starter</Text>
+                                </Pressable>
+
+                                <Pressable style={[styles.pressableButton, selectedItem === "Main" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Main")}>
+                                    <Text style={[styles.switchButtonText, selectedItem === "Main" && { color: "#F8BD06" }]}>Main</Text>
+                                </Pressable>
+
+                                <Pressable style={[styles.pressableButton, selectedItem === "Dessert" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Dessert")}>
+                                    <Text style={[styles.switchButtonText, selectedItem === "Dessert" && { color: "#F8BD06" }]}>Dessert</Text>
+                                </Pressable>
+                            </View>
+
+                            <TextInput
+                                style={hasErrors && (itemName.length === 0 || itemName.length > 20) ? styles.inputStyleError : styles.inputStyle}
+                                placeholder="Name of dish"
+                                placeholderTextColor={"#b0b0b0"}
+                                value={itemName}
+                                onChangeText={setItemName}
+                            />
+                            {hasErrors && itemName.length === 0 && (
+                                <Text style={styles.errorText}>Please enter a name</Text>
+                            )}
+                            {hasErrors && itemName.length > 20 && (
+                                <Text style={styles.errorText}>Please enter only up to 20 characters for the name</Text>
+                            )}
+
+                            <TextInput
+                                style={hasErrors && (itemDesc.length === 0 || itemDesc.length > 40) ? styles.inputStyleError : styles.inputStyle}
+                                placeholder="Dish description"
+                                placeholderTextColor={"#b0b0b0"}
+                                value={itemDesc}
+                                onChangeText={setItemDesc}
+                            />
+                            {hasErrors && itemDesc.length === 0 && (
+                                <Text style={styles.errorText}>Please enter a description</Text>
+                            )}
+                            {hasErrors && itemDesc.length > 40 && (
+                                <Text style={styles.errorText}>Please enter only up to 40 characters for the description</Text>
+                            )}
+
+                            <TextInput
+                                style={hasErrors && (!itemPrice || isNaN(parseInt(itemPrice)) || parseInt(itemPrice) <= 0) ? styles.inputStyleError : styles.inputStyle}
+                                placeholder="Price of dish"
+                                placeholderTextColor={"#b0b0b0"}
+                                value={itemPrice}
+                                onChangeText={setItemPrice}
+                                keyboardType="numeric"
+                            />
+                            {hasErrors && (!itemPrice || isNaN(parseInt(itemPrice)) || parseInt(itemPrice) <= 0) && (
+                                <Text style={styles.errorText}>Please enter a valid price</Text>
+                            )}
+
+                            <View style={styles.container}>
+                                <Pressable style={styles.pressableButton} onPress={addItem}>
+                                    <Text style={styles.textStyle}>Confirm</Text>
+                                </Pressable>
+                            </View>
+
                         </View>
-                        <View style={[styles.switchContainer, { alignSelf: "center" }]}>
-                            <Pressable style={[styles.pressableButton, selectedItem === "Starter" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Starter")}>
-                                <Text style={[styles.switchButtonText, selectedItem === "Starter" && { color: "#F8BD06" }]}>Starter</Text>
-                            </Pressable>
-
-                            <Pressable style={[styles.pressableButton, selectedItem === "Main" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Main")}>
-                                <Text style={[styles.switchButtonText, selectedItem === "Main" && { color: "#F8BD06" }]}>Main</Text>
-                            </Pressable>
-
-                            <Pressable style={[styles.pressableButton, selectedItem === "Dessert" && { backgroundColor: "#212121" }]} onPress={() => setSelectedItem("Dessert")}>
-                                <Text style={[styles.switchButtonText, selectedItem === "Dessert" && { color: "#F8BD06" }]}>Dessert</Text>
-                            </Pressable>
-                        </View>
-
-                        <TextInput
-                            style={hasErrors && (itemName.length === 0 || itemName.length > 20) ? styles.inputStyleError : styles.inputStyle}
-                            placeholder="Name of dish"
-                            placeholderTextColor={"#b0b0b0"}
-                            value={itemName}
-                            onChangeText={setItemName}
-                        />
-                        {hasErrors && itemName.length === 0 && (
-                            <Text style={styles.errorText}>Please enter a name</Text>
-                        )}
-                        {hasErrors && itemName.length > 20 && (
-                            <Text style={styles.errorText}>Please enter only up to 20 characters for the name</Text>
-                        )}
-
-                        <TextInput
-                            style={hasErrors && (itemDesc.length === 0 || itemDesc.length > 40) ? styles.inputStyleError : styles.inputStyle}
-                            placeholder="Dish description"
-                            placeholderTextColor={"#b0b0b0"}
-                            value={itemDesc}
-                            onChangeText={setItemDesc}
-                        />
-                        {hasErrors && itemDesc.length === 0 && (
-                            <Text style={styles.errorText}>Please enter a description</Text>
-                        )}
-                        {hasErrors && itemDesc.length > 40 && (
-                            <Text style={styles.errorText}>Please enter only up to 40 characters for the description</Text>
-                        )}
-
-                        <TextInput
-                            style={hasErrors && (!itemPrice || isNaN(parseInt(itemPrice)) || parseInt(itemPrice) <= 0) ? styles.inputStyleError : styles.inputStyle}
-                            placeholder="Price of dish"
-                            placeholderTextColor={"#b0b0b0"}
-                            value={itemPrice}
-                            onChangeText={setItemPrice}
-                            keyboardType="numeric"
-                        />
-                        {hasErrors && (!itemPrice || isNaN(parseInt(itemPrice)) || parseInt(itemPrice) <= 0) && (
-                            <Text style={styles.errorText}>Please enter a valid price</Text>
-                        )}
-
-                        <View style={styles.container}>
-                            <Pressable style={styles.pressableButton} onPress={addItem}>
-                                <Text style={styles.textStyle}>Confirm</Text>
-                            </Pressable>
-                        </View>
-
-                        <View style={styles.container}>
-                            <Pressable style={styles.pressableButton} onPress={populateTestData}>
-                                <Text style={styles.textStyle}>Populate test data</Text>
-                            </Pressable>
-                        </View>
-
-                    </View>
+                    </Animated.View>
                 </KeyboardAwareScrollView>
             </GestureHandlerRootView>
         </SafeAreaView>

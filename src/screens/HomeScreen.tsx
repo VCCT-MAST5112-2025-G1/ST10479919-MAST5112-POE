@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import {
+  Animated,
   Text,
   View,
   Image,
@@ -10,17 +11,19 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { styles, categoryStyle } from "../styles/styles";
 import { RootTabParamList } from "../navigation/AppNavigator";
-import { menuData, resetMenuAdded } from "../services/menuItems";
+import { useMenu } from "../services/MenuContext";
+import { menuData, } from "../services/menuItems";
 import { ScrollView } from "react-native";
 import { useFocusEffect } from '@react-navigation/native';
 
 type Props = BottomTabScreenProps<RootTabParamList, "Home">;
 
 export default function HomeScreen({ navigation }: Props) {
-  const menuLength = menuData.Starter.length + menuData.Main.length + menuData.Dessert.length
-  const totalCost = menuData.Starter.reduce((total, item) => total + item.Price, 0) +
-    menuData.Main.reduce((total, item) => total + item.Price, 0) +
-    menuData.Dessert.reduce((total, item) => total + item.Price, 0)
+  const { menuList } = useMenu();
+
+  const menuLength = menuList.length
+  const totalCost = menuList.reduce((total, item) => total + item.Price, 0)
+
   const [refresh, setRefresh] = useState(0)
 
   // Refresh screen on focus
@@ -30,104 +33,79 @@ export default function HomeScreen({ navigation }: Props) {
     }, [])
   );
 
-  const resetMenuList = () => {
-    Alert.alert(
-      'Are you sure?',
-      'This is NOT reversible',
-      [
-        {
-          text: 'Cancel',
-          style: 'cancel',
-        },
-        {
-          text: 'OK',
-          onPress: () => {
-            setRefresh(prev => prev + 1)
-            menuData.Starter = []
-            menuData.Main = []
-            menuData.Dessert = []
-            Alert.alert("Items reset", "All items removed from menu")
-          }
-        },
-      ],
-      {
-        cancelable: true,
-      }
-    );
-  }
 
+  const fadeAniHandle = useRef(new Animated.Value(1)).current;
+
+  useFocusEffect(
+    React.useCallback(() => {
+      Animated.timing(fadeAniHandle, { toValue: 1, duration: 300, useNativeDriver: true }).start()
+      return () => {
+        fadeAniHandle.setValue(0);
+      }
+    }, [])
+  )
 
   return (
 
+
     <SafeAreaView style={[styles.container]}>
       <ScrollView showsVerticalScrollIndicator={true}>
-        <View style={{ alignSelf: "center" }}>
-          <Image source={require("../../assets/img/Frame.png")} />
-        </View>
+        <Animated.View style={{ opacity: fadeAniHandle, flex: 1 }}>
+          <View style={{ alignSelf: "center" }}>
+            <Image source={require("../../assets/img/Frame.png")} />
+          </View>
 
-        <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
-          <Text style={styles.titleText}>The Cookbook</Text>
-        </View>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "center" }}>
+            <Text style={styles.titleText}>The Cookbook</Text>
+          </View>
 
-        {/* Check to see if items are added */}
-        {menuLength == 0 ? (
-          <Text style={styles.textStyle}>
-            Add some items from the menu to prepare a course!
-          </Text>
-        ) : (
-          <>
-            <Text style={styles.titleText}>All Menu Items: {menuLength}</Text>
-            <Text style={[categoryStyle.price, { marginBottom: 20 }]}>Total cost: R{totalCost}</Text>
+          {/* Check to see if items are added */}
+          {menuLength == 0 ? (
+            <Text style={styles.textStyle}>
+              First add some items from the "Add Items" menu{'\n\n'}
+              Then go to the "Menu" screen to add items to the course!
+            </Text>
+          ) : (
+            <>
+              <Text style={styles.titleText}>Items in your list</Text>
+              <Text style={categoryStyle.price}>Total cost: R{totalCost}</Text>
+              {menuList.map((item, index) => (
+                <View key={index}
+                  style={{
+                    backgroundColor: "#2a2a2a",
+                    padding: 15,
+                    borderRadius: 10,
+                    marginBottom: 8,
+                    width: "100%",
+                  }}
+                >
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
 
-            {/* Starters Section */}
-            {menuData.Starter.length > 0 ? (
-              <View style={styles.card}>
-                <Text style={styles.headerText}>Starters</Text>
-                {menuData.Starter.map((item, index) => (
-                  <View key={index} style={[categoryStyle.categories, { marginBottom: 10 }]}>
-                    <Text style={categoryStyle.name}>{item.Name}</Text>
-                    <Text style={categoryStyle.description}>{item.Description}</Text>
-                    <Text style={categoryStyle.price}>R{item.Price}</Text>
+                    <Text style={{ color: "#FFFFFF", fontSize: 16, fontWeight: "600", }}>
+                      {item.Name}
+                    </Text>
+
+                    <Text style={{ color: "#F8BD06", fontSize: 16, fontWeight: "600", }}>
+                      R{item.Price}
+                    </Text>
+
                   </View>
-                ))}
-              </View>
-            ) : null}
 
-            {/* Mains Section */}
-            {menuData.Main.length > 0 ? (
-              <View style={styles.card}>
-                <Text style={styles.headerText}>Mains</Text>
-                {menuData.Main.map((item, index) => (
-                  <View key={index} style={[categoryStyle.categories, { marginBottom: 10 }]}>
-                    <Text style={categoryStyle.name}>{item.Name}</Text>
-                    <Text style={categoryStyle.description}>{item.Description}</Text>
-                    <Text style={categoryStyle.price}>R{item.Price}</Text>
-                  </View>
-                ))}
-              </View>
-            ) : null}
+                  <Text style={{ color: "#cccccc", fontSize: 14, marginTop: 4 }}>
+                    {item.Description}
+                  </Text>
 
-            {/* Desserts Section */}
-            {menuData.Dessert.length > 0 ? (
-              <View style={styles.card}>
-                <Text style={styles.headerText}>Desserts</Text>
-                {menuData.Dessert.map((item, index) => (
-                  <View key={index} style={[categoryStyle.categories, { marginBottom: 10 }]}>
-                    <Text style={categoryStyle.name}>{item.Name}</Text>
-                    <Text style={categoryStyle.description}>{item.Description}</Text>
-                    <Text style={categoryStyle.price}>R{item.Price}</Text>
-                  </View>
-                ))}
-              </View>
-            ) : null}
-
-            <Pressable style={[styles.pressableButton, { width: '50%', alignSelf: "center", backgroundColor: '#FF4444' }]} onPress={() => { resetMenuList() }}>
-              <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Reset Menu</Text>
-            </Pressable>
-          </>
-        )}
+                  <Text style={{ color: "#888888", fontSize: 12, marginTop: 6, fontStyle: "italic", }}>
+                    {item.Type}
+                  </Text>
+                </View>
+              ))}
+              )
+            </>
+          )}
 
 
+        </Animated.View>
       </ScrollView>
     </SafeAreaView>
   );

@@ -19,8 +19,8 @@ type Props = NativeStackScreenProps<MenuStackList, "Menu">;
 
 export default function MenuScreen({ navigation, route }: Props) {
     const { menuList, addToMenu, removeFromMenu } = useMenu();
-    const fadeAnimation = useRef(new Animated.Value(1)).current;
 
+    const fadeAnimation = useRef(new Animated.Value(1)).current;
     useFocusEffect(
         React.useCallback(() => {
             Animated.timing(fadeAnimation, { toValue: 1, duration: 300, useNativeDriver: true }).start()
@@ -29,7 +29,7 @@ export default function MenuScreen({ navigation, route }: Props) {
             }
         }, [])
     )
-
+    // Grabs the menuType from selection. Default to Starter if anything goes wrong
     const [selectedItem, setSelectedItem] = useState<menuType>(route.params?.selectedType || "Starter");
     const itemCount = menuData[selectedItem].length
 
@@ -42,6 +42,7 @@ export default function MenuScreen({ navigation, route }: Props) {
     );
 
     var totalCost = 0
+    // Checks if itemCount isn't 0
     if (!(itemCount === 0)) {
         totalCost = menuData[selectedItem].reduce((total, item) => total + item.Price, 0)
     }
@@ -74,7 +75,7 @@ export default function MenuScreen({ navigation, route }: Props) {
                         <View style={styles.container}>
                             <Text style={styles.titleText}>{selectedItem}s</Text>
                             <Text style={[styles.textStyle, { textAlign: "center", color: '#b0b0b0' }]}>
-                                No items to display. Add some!
+                                No items added. Add some in the "Add items" menu!
                             </Text>
                         </View>
                     ) : (
@@ -90,6 +91,7 @@ export default function MenuScreen({ navigation, route }: Props) {
                                 </View>
 
                                 {menuData[selectedItem].map((item, index) => {
+                                    // for a check to see if item is added by using name 
                                     const isAdded = isItemSelected(item.Name);
                                     return (
                                         <View key={index} style={categoryStyle.categories}>
@@ -98,9 +100,10 @@ export default function MenuScreen({ navigation, route }: Props) {
                                             <Text style={categoryStyle.price}>{`R${item.Price}`}</Text>
                                             <Pressable
                                                 style={[styles.pressableButton, { marginTop: 10 }, isAdded && { backgroundColor: "#FF4444" }]}
+                                                // Depending on if item's name corresponds switch between selection types 
                                                 onPress={() => isAdded ? removeFromSelection(item) : addToSelection(item)}
                                             >
-                                                <Text style={styles.textStyle}>{isAdded ? "Remove Item" : "Add Item"}</Text>
+                                                <Text style={styles.textStyle}> {isAdded ? "Remove Item" : "Add Item"} </Text>
                                             </Pressable>
                                         </View>
                                     )

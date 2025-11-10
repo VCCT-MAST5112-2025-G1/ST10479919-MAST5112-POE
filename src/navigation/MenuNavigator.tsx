@@ -7,6 +7,7 @@ import MenuScreen from "../screens/MenuScreen";
 
 export type MenuStackList = {
     SelectMenu: undefined;
+    // Filter group
     Menu: { selectedType: "Starter" | "Main" | "Dessert" };
 }
 
@@ -14,7 +15,7 @@ const Stack = createNativeStackNavigator<MenuStackList>();
 
 export default function MenuNavigator() {
 
-    
+
     return (
         <Stack.Navigator
             screenOptions={{
