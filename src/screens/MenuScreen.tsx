@@ -91,6 +91,7 @@ export default function MenuScreen({ navigation, route }: Props) {
                                 </View>
 
                                 {menuData[selectedItem].map((item, index) => {
+                                    // for a check to see if item is added by using name 
                                     const isAdded = isItemSelected(item.Name);
                                     return (
                                         <View key={index} style={categoryStyle.categories}>
@@ -99,6 +100,7 @@ export default function MenuScreen({ navigation, route }: Props) {
                                             <Text style={categoryStyle.price}>{`R${item.Price}`}</Text>
                                             <Pressable
                                                 style={[styles.pressableButton, { marginTop: 10 }, isAdded && { backgroundColor: "#FF4444" }]}
+                                                // Depending on if item's name corresponds switch between selection types 
                                                 onPress={() => isAdded ? removeFromSelection(item) : addToSelection(item)}
                                             >
                                                 <Text style={styles.textStyle}> {isAdded ? "Remove Item" : "Add Item"} </Text>

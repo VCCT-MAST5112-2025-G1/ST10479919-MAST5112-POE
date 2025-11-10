@@ -11,7 +11,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { MenuStackList } from "../navigation/MenuNavigator";
 import { styles } from "../styles/styles";
 import { useFocusEffect } from '@react-navigation/native';
-import { menuType, menuData, populateTestData, } from "../services/menuItems";
+import { menuType, menuData, } from "../services/menuItems";
 import { useMenu } from "../services/MenuContext"
 
 type Props = NativeStackScreenProps<MenuStackList, "SelectMenu">;
@@ -94,12 +94,6 @@ export default function SelectMenu({ navigation }: Props) {
                 </View>
 
                 <View style={{ marginTop: 30, gap: 10, width: '100%' }}>
-                    <Pressable
-                        style={[styles.pressableButton, { width: '100%', backgroundColor: '#4CAF50' }]}
-                        onPress={() => { populateTestData() }}
-                    >
-                        <Text style={[styles.buttonText, { color: '#FFFFFF' }]}>Enter Test Data</Text>
-                    </Pressable>
 
                     <Pressable
                         style={[styles.pressableButton, { width: '100%', backgroundColor: '#FF4444' }]}

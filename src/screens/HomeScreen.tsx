@@ -62,7 +62,8 @@ export default function HomeScreen({ navigation }: Props) {
           {/* Check to see if items are added */}
           {menuLength == 0 ? (
             <Text style={styles.textStyle}>
-              Add some items from the "Menu" screen to prepare a course!
+              First add some items from the "Add Items" menu{'\n\n'}
+              Then go to the "Menu" screen to add items to the course!
             </Text>
           ) : (
             <>

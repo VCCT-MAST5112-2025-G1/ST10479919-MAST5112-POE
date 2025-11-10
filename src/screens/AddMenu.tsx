@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs";
-import { menuData, menuType, MENU, populateTestData } from "../services/menuItems";
+import { menuData, menuType, MENU } from "../services/menuItems";
 import { GestureHandlerRootView, ScrollView } from 'react-native-gesture-handler';
 import { useFocusEffect } from "@react-navigation/native";
 import { styles } from "../styles/styles";
@@ -26,6 +26,7 @@ export default function AddMenu({ navigation }: Props) {
     // Grab state for the switch, default to starter
     const [selectedItem, setSelectedItem] = useState<menuType>("Starter");
 
+    // Sets the inputs to default
     const resetInputs = () => {
         setItemName("")
         setItemDesc("")
@@ -142,12 +143,6 @@ export default function AddMenu({ navigation }: Props) {
                             <View style={styles.container}>
                                 <Pressable style={styles.pressableButton} onPress={addItem}>
                                     <Text style={styles.textStyle}>Confirm</Text>
-                                </Pressable>
-                            </View>
-
-                            <View style={styles.container}>
-                                <Pressable style={styles.pressableButton} onPress={populateTestData}>
-                                    <Text style={styles.textStyle}>Populate test data</Text>
                                 </Pressable>
                             </View>
 
