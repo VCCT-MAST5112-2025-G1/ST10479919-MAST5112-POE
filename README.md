@@ -9,10 +9,13 @@ A lightweight app that allows for a chef to organize their dishes.
 - Sort by Starters | Mains | Desserts
 - See total costs of items
 
-## Requirement
-Android 8.0 or higher with a screen size of 378x720 is recommended
+## Requirements
+Nodejs to run the app from an emulator (https://nodejs.org/en)
 
+Android 8.0 or higher with a screen size of 378x720 is recommended
 IOS is compatibile and should run. However, the app was mostly tested on Android so expect some bugs
+
+
 
 ## Screenshots
 ![Screenshot_20251022_131342_Expo_Go](https://github.com/user-attachments/assets/f4269c66-86a2-4621-bb17-187b8584414a)
@@ -23,6 +26,7 @@ IOS is compatibile and should run. However, the app was mostly tested on Android
 ```bash
   git clone https://github.com/ST10479919/ST10479919-MAST5112-POE
   cd ST10479919-MAST5112-POE
+  npm install
   npm run start
 ```
 
